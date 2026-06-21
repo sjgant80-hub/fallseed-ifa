@@ -1,0 +1,11 @@
+{
+  "name": "fallseed-ifa",
+  "level": 0,
+  "parent": "fallseed-hr",
+  "prime": 1031,
+  "meshChannel": "fall-ifa",
+  "spec": "https://www.ai-nativesolutions.com/spec.html",
+  "licence": "MIT",
+  "seal": "◊·κ=1",
+  "updatedAt": "2026-06-21"
+}
