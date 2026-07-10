@@ -159,22 +159,19 @@ main{padding:24px 32px 80px;overflow-y:auto;max-width:1200px;margin:0 auto;width
     'llama-3b':  { id: 'Llama-3.2-3B-Instruct-q4f16_1-MLC',   size: '~2GB',   label: '3B · balanced · default · most laptops' },
     'qwen-7b':   { id: 'Qwen2.5-7B-Instruct-q4f16_1-MLC',     size: '~5GB',   label: '7B · capable · needs decent GPU (M-series Mac / 8GB+ VRAM)' },
     'llama-8b':  { id: 'Llama-3.1-8B-Instruct-q4f16_1-MLC',   size: '~5GB',   label: '8B · common · needs decent GPU' },
-    'llama-70b': { id: 'Llama-3.1-70B-Instruct-q4f16_1-MLC',  size: '~40GB',  label: '70B · frontier · needs serious GPU + 64GB+ RAM' },
-  };
+    'llama-70b': { id: 'Llama-3.1-70B-Instruct-q4f16_1-MLC',  size: '~40GB',  label: '70B · frontier · needs serious GPU + 64GB+ RAM' }};
   const DEFAULT_MODEL = 'llama-3b';
 
   const T3_PROVIDERS = {
     anthropic: { label: 'Anthropic Claude', models: ['claude-sonnet-4-5','claude-opus-4-7','claude-haiku-4-5'], default: 'claude-sonnet-4-5', url: 'https://api.anthropic.com/v1/messages' },
     openai:    { label: 'OpenAI',           models: ['gpt-4o','gpt-4o-mini','o1-mini'],                          default: 'gpt-4o-mini',      url: 'https://api.openai.com/v1/chat/completions' },
-    google:    { label: 'Google Gemini',    models: ['gemini-1.5-pro','gemini-1.5-flash','gemini-2.0-flash-exp'], default: 'gemini-1.5-flash', url: 'https://generativelanguage.googleapis.com/v1beta/models/' },
-  };
+    google:    { label: 'Google Gemini',    models: ['gemini-1.5-pro','gemini-1.5-flash','gemini-2.0-flash-exp'], default: 'gemini-1.5-flash', url: 'https://generativelanguage.googleapis.com/v1beta/models/' }};
 
   // ─── State ───────────────────────────────────────────────────────
   const STATE = {
     config: loadConfig(),
     ai: { ready: false, loading: false, progress: 0, engine: null, model: null },
-    mesh: { active: false, peers: new Map(), bc: null, signal: null },
-  };
+    mesh: { active: false, peers: new Map(), bc: null, signal: null }};
 
   function loadConfig() {
     try { return JSON.parse(localStorage.getItem('fall-kit.config') || '{}'); }
@@ -241,8 +238,7 @@ main{padding:24px 32px 80px;overflow-y:auto;max-width:1200px;margin:0 auto;width
     if (tier === 'T2' && STATE.ai.ready && STATE.ai.engine) {
       const r = await STATE.ai.engine.chat.completions.create({
         messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: userMsg }],
-        max_tokens: maxTokens,
-      });
+        max_tokens: maxTokens});
       return r.choices[0].message.content;
     }
     if (tier === 'T3' && STATE.config.api_key && STATE.config.api_provider) {
@@ -259,8 +255,7 @@ main{padding:24px 32px 80px;overflow-y:auto;max-width:1200px;margin:0 auto;width
       const r = await fetch(T3_PROVIDERS.anthropic.url, {
         method: 'POST',
         headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
-        body: JSON.stringify({ model, max_tokens: maxTokens, system: sys, messages: [{ role: 'user', content: msg }] }),
-      });
+        body: JSON.stringify({ model, max_tokens: maxTokens, system: sys, messages: [{ role: 'user', content: msg }] })});
       if (!r.ok) throw new Error('Anthropic ' + r.status + ': ' + (await r.text()).slice(0, 200));
       const j = await r.json();
       return j.content[0].text;
@@ -269,8 +264,7 @@ main{padding:24px 32px 80px;overflow-y:auto;max-width:1200px;margin:0 auto;width
       const r = await fetch(T3_PROVIDERS.openai.url, {
         method: 'POST',
         headers: { 'content-type': 'application/json', 'Authorization': 'Bearer ' + key },
-        body: JSON.stringify({ model, max_tokens: maxTokens, messages: [{ role: 'system', content: sys }, { role: 'user', content: msg }] }),
-      });
+        body: JSON.stringify({ model, max_tokens: maxTokens, messages: [{ role: 'system', content: sys }, { role: 'user', content: msg }] })});
       if (!r.ok) throw new Error('OpenAI ' + r.status);
       const j = await r.json();
       return j.choices[0].message.content;
@@ -279,8 +273,7 @@ main{padding:24px 32px 80px;overflow-y:auto;max-width:1200px;margin:0 auto;width
       const r = await fetch(T3_PROVIDERS.google.url + model + ':generateContent?key=' + encodeURIComponent(key), {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: sys + '\n\n---\n\n' + msg }] }], generationConfig: { maxOutputTokens: maxTokens } }),
-      });
+        body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: sys + '\n\n---\n\n' + msg }] }], generationConfig: { maxOutputTokens: maxTokens } })});
       if (!r.ok) throw new Error('Google ' + r.status);
       const j = await r.json();
       return j.candidates[0].content.parts[0].text;
@@ -521,8 +514,7 @@ main{padding:24px 32px 80px;overflow-y:auto;max-width:1200px;margin:0 auto;width
     openMint: openMint,  // v1.2 · launch kcc-mint with this seed prefilled as parent
     MODELS: WEBLLM_MODELS,
     PROVIDERS: T3_PROVIDERS,
-    state: STATE,
-  };
+    state: STATE};
 })(typeof window !== 'undefined' ? window : globalThis);
 
 </script>
@@ -590,13 +582,13 @@ const SEED_DEFAULT = {
  { pattern: 'consumer duty|prin 12|fair value', answer: 'FCA Consumer Duty (PRIN 12): four outcomes — products & services, price & value, consumer understanding, consumer support. Cross-cutting rules: act in good faith, avoid foreseeable harm, enable customers to pursue their objectives. Open products since 31 Jul 2023; closed since 31 Jul 2024. Board champion required; annual Consumer Duty board report.' },
  { pattern: 'suitab|cobs 9|reasons.?why', answer: 'Suitability (COBS 9): collect facts (objectives, financial situation, knowledge & experience, risk tolerance & capacity) → assess → provide suitability report. Reasons-why letter mandatory. Annual review for ongoing-service clients.' },
  { pattern: 'cass|client (money|asset)|cmar', answer: 'CASS: client money & assets segregated. Daily reconciliation. CMAR returns. CASS audit annually. CF10a / SMF18 oversight.' },
- { pattern: 'isa', answer: 'ISA: £20,000 annual allowance (2025/26). Cash · Stocks & Shares · LISA · JISA. Flexible ISA rules: withdraw and replace within same tax year. LISA £4k counts within £20k. JISA £9k separate.' },
- { pattern: 'sipp|pension allowance', answer: 'SIPP / pension: £60,000 annual allowance (tapered for adjusted income > £260k, min £10k). Lifetime allowance abolished 6 Apr 2024 (LSA £268,275 / LSDBA £1,073,100 caps). MPAA £10,000 if flexibly accessed. Carry-forward 3 prior tax years.' },
- { pattern: 'lisa|lifetime isa', answer: 'LISA: £4,000/year, 25% gov bonus. 25% withdrawal penalty unless first home purchase (≤£450,000) or aged 60+. Open age 18-39.' },
+ { pattern: 'isa', answer: 'ISA: TBA annual allowance (2025/26). Cash · Stocks & Shares · LISA · JISA. Flexible ISA rules: withdraw and replace within same tax year. LISA TBAk counts within TBAk. JISA TBAk separate.' },
+ { pattern: 'sipp|pension allowance', answer: 'SIPP / pension: TBA annual allowance (tapered for adjusted income > TBAk, min TBAk). Lifetime allowance abolished 6 Apr 2024 (LSA TBA / LSDBA TBA caps). MPAA TBA if flexibly accessed. Carry-forward 3 prior tax years.' },
+ { pattern: 'lisa|lifetime isa', answer: 'LISA: TBA, 25% gov bonus. 25% withdrawal penalty unless first home Access (≤TBA) or aged 60+. Open age 18-39.' },
  { pattern: 'vulnerab|fg21|fg21/1', answer: 'FG21/1 vulnerable customers: identify drivers (health, life events, capability, resilience). Adapt service. Train staff. Record clearly. Outcome monitoring required under Consumer Duty.' },
- { pattern: 'fscs|protection', answer: 'FSCS: deposit £85,000 per institution. Investment £85,000. Insurance 100% no cap for long-term / compulsory. Pension provider £85k (or 100% if SIPP wrapper holds protected assets).' },
- { pattern: 'fos|ombud|threshold', answer: 'FOS: free to consumer. Award threshold £430,000 for acts after 1 Apr 2025 (£430k from Apr 2025; £415k from Apr 2024). Firm must issue final response within 8 weeks (15 business days for payment services). Award is binding if accepted.' },
- { pattern: 'pension transfer|safeguarded|pts', answer: 'Pension transfer specialist (PTS) qualification required for advice on transfers of safeguarded benefits (DB / GMP / with-profits). Independent advice mandatory for transfers > £30,000 (Pension Schemes Act 2015 s.48). APTA + TVC required since 1 Oct 2018.' },
+ { pattern: 'fscs|protection', answer: 'FSCS: deposit TBA per institution. Investment TBA. Insurance 100% no cap for long-term / compulsory. Pension provider TBAk (or 100% if SIPP wrapper holds protected assets).' },
+ { pattern: 'fos|ombud|threshold', answer: 'FOS: free to consumer. Award threshold TBA for acts after 1 Apr 2025 (TBAk from Apr 2025; TBAk from Apr 2024). Firm must issue final response within 8 weeks (15 business days for payment services). Award is binding if accepted.' },
+ { pattern: 'pension transfer|safeguarded|pts', answer: 'Pension transfer specialist (PTS) qualification required for advice on transfers of safeguarded benefits (DB / GMP / with-profits). Independent advice mandatory for transfers > TBA (Pension Schemes Act 2015 s.48). APTA + TVC required since 1 Oct 2018.' },
  { pattern: 'mifid|mifid ii|costs.?charges', answer: 'MiFID II: ex-ante and ex-post costs & charges disclosure. 10% drop reporting for portfolio MIFIDPRU firms. Best execution evidence.' },
  { pattern: 'sm&cr|smf|conduct rules', answer: 'SM&CR: Senior Managers Functions (SMFs), Certification Regime for material-risk takers, Conduct Rules for nearly all staff. Annual fitness & propriety. Statements of Responsibilities for SMFs.' }
  ],
@@ -620,7 +612,7 @@ const SEED_DEFAULT = {
  { code: 'SUITABILITY-OPEN', text: 'This suitability report is provided under COBS 9 and explains why the recommended product or strategy is suitable for your objectives, financial situation, knowledge and experience, and your willingness and ability to take risk.' },
  { code: 'CONSUMER-DUTY', text: 'This document complies with FCA Consumer Duty (PRIN 12): products & services, price & value, consumer understanding, consumer support.' },
  { code: 'FOS-FSCS', text: 'If you are unhappy with our service you may complain. If unresolved within 8 weeks you may refer the complaint to the Financial Ombudsman Service. We are covered by the Financial Services Compensation Scheme.' },
- { code: 'PENSION-TRANSFER', text: 'Transferring out of a defined benefit pension is unlikely to be in your best interests. Independent advice from a Pension Transfer Specialist is mandatory for transfers exceeding £30,000 (Pension Schemes Act 2015 s.48).' },
+ { code: 'PENSION-TRANSFER', text: 'Transferring out of a defined benefit pension is unlikely to be in your best interests. Independent advice from a Pension Transfer Specialist is mandatory for transfers exceeding TBA (Pension Schemes Act 2015 s.48).' },
  { code: 'GDPR-NOTICE', text: 'Personal data is processed for the provision of financial advice. Lawful basis: contract Art.6(1)(b) and legitimate interest Art.6(1)(f); special-category data on explicit consent Art.9(2)(a). Retention: 6 years after end of advice relationship (15 for pensions / life).' }
  ],
  buildPromptSystem: `You are FallSeed-Build, the generative substrate of the FallSeed IFA wedge.
@@ -695,7 +687,7 @@ const PROVIDERS = [
  model: 'claude-sonnet-4-20250514', requiresKey: true, paid: true, defaultEnabled: false, supportsStream: true,
  pricePer1MIn: 3, pricePer1MOut: 15,
  signupUrl: 'https://console.anthropic.com/',
- note: 'Sonnet 4: ~£0.03/tool · highest quality codegen' }
+ note: 'Sonnet 4: ~TBA/tool · highest quality codegen' }
 ];
 
 // ═══════════════════════════════════════════════════════════════
