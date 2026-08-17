@@ -42,7 +42,7 @@ IFA · financial planning · investments (UK).
 - No telemetry, no analytics, no tracking
 - All data stays on your device (IDB) — nothing posted unless you wire an external LLM
 - Works offline once installed as PWA
-- access; upgrades optional
+- One-time payment; upgrades optional
 
 ## Cosmology
 
